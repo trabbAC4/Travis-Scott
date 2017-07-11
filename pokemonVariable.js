@@ -1,0 +1,11 @@
+var snorlaxHP = 160;
+var snorlaxNum= 143:
+var snorlaxType= "normal";
+var snorlaxBestMove = "Hyper Beam";
+var snorlaxLastEvo= true;
+var snorlaxattack= 160;
+var snorlaxdefense= 65;
+var snorlaxspeed= 30;
+var snorlaxtotal= 540;
+var snorlaxspecialattack = 65;
+snorlaxHP= snorlaxHP - 50;
