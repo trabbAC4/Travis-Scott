@@ -41,5 +41,3 @@ else
         console.log("Player two wins");
 
     }
-
-}
