@@ -1,0 +1,261 @@
+/*Note: As I did my project, I used German articles in my variable names. This is just a heads up.*/
+/*Also, the default case in the switches is meant to be an Easter Egg if you messed up the game somehow.*/
+var superbuttongamestarter = document.body.getElementsByTagName("button")[0];
+/*This gets the button to start the game*/
+var startdergame = function(){
+/*This is the function that will eventually go into an event listener*/
+superbuttongamestarter.innerHTML = "I am here to spectate.";
+/*This is here because the start button would not do anything afterwards, so it is better to change the name to avoid confusion.*/
+  var h1Element = document.body.getElementsByTagName("h1")[0];
+/*This grabs the h1Element which changes the text at the top of the page.*/
+  var victorylosspic = document.body.getElementsByClassName("winneroloser")[0];
+/*This accesses the paragraph element which will hold buttons and a picture.*/
+  superbuttongamestarter.removeEventListener("click",startdergame);
+/*We remove the listener because we don't want it to be activated again.*/
+  h1Element.innerHTML = "Excellent. A password has been created. You have five tries to get it right and three hints along the way. Use the numpad or your keyboard to input numbers. Enter your guess with the black arrow on the numpad.";
+/*This gives instructions to the player at the top of the page.*/
+  var guesses = 0;
+  var index = 0;
+  var hintometer = 0;
+/*The above 3 variables are used as indices for their respective functions.*/
+  var inputbox = document.body.getElementsByTagName("input")[0];
+/*This is the most important variable because it grabs the box where the user types in their input.*/
+  var guessestablearray = document.body.getElementsByClassName("guess");
+  var guessnumtablearray = document.body.getElementsByClassName("guessnum");
+  var resulttablearray = document.body.getElementsByClassName("result");
+/*These arrays are used to get every table row of the guesstable along with the classification of that row.*/
+  var deleter = function(){
+     var stringo = inputbox.value;
+     var lengtho = stringo.length;
+     inputbox.value = inputbox.value.slice(0,lengtho-1);
+   };
+/*This is used for the x in the numpad and by utilizing slices, it can delete the last letter in the inputbox.*/
+   var passwordmaker = function(){
+     var i = 0;
+     var password = "";
+     while (i < 4){
+       var randomnumber = Math.floor(Math.random()*10);
+       var randomnumberstring = randomnumber.toString();
+       var password = password.concat(randomnumberstring);
+       i++;
+     };
+     return password;
+   };
+/*This function utilizes a loop to make a four digit password that must be cracked. It creates four separate digits that are concatenated.*/
+  daspasswordinuse = passwordmaker();
+/*This is the password we want to use.*/
+var e = document.body.getElementsByClassName("e")[0];
+/*This is var e, our enter button. It needs to be up here because other functions add events later one.*/
+  var lengthNaNchecker = function(){
+    var dasinput = inputbox.value;
+    if (isNaN(dasinput)){
+      return 1;
+    }
+    else if (dasinput.length < 4 || dasinput.length > 4){
+      return 2;
+    }
+    else{
+      return 3;
+    }
+  };
+/*This function returns values used in another function. I used numbers because they are easier to use for switch statements*/
+/*1 means that it is not a number, 2 means that it is not 4 characters long, and 3 means it's a good guess. I did this because I do not want to penalize people*/
+/*if they use letters by accident or put a different amount of characters.*/
+  var buttonlistenerforlengthcheck = function(){
+    var inputlegitimacy = lengthNaNchecker();
+    switch (inputlegitimacy){
+      case 1:
+        h1Element.innerHTML = "Oops, that is not a number.";
+        break;
+      case 2:
+        h1Element.innerHTML = "Uh-oh, your password is not 4 characters.";
+        break;
+      case 3:
+        index++;
+        h1Element.innerHTML = "Check the table for more detailed information.";
+        guessestablearray[index - 1].innerHTML = inputbox.value;
+        guesses++;
+        guessnumtablearray[index - 1].innerHTML = guesses;
+        break;
+      default:
+        h1Element.innerHTML = "Whoops. There was a problem. Please contact God for help.";
+        break;
+    }
+  }
+/*This function uses the previous function. This also uses a switch statement. From the returned value, it determines wheter you have too many characters*/
+/*or if you had used letters by accident.*/
+  var passwordcheckforrightness = function(){
+    var theinputisinhere = inputbox.value;
+    daspasswordgiven = guessestablearray[index - 1].innerHTML;
+    if(isNaN(theinputisinhere)){
+      return 4;
+    }
+    else if(theinputisinhere.length < 4 || theinputisinhere.length >4){
+      return 4;
+    }
+    else if(daspasswordgiven === daspasswordinuse){
+      return 5;
+    }
+    else{
+      return 6;
+    }
+  }
+/*This function returns values for another function. It checks if the password is right. It returns 4 if the password did not meet the criteria (length and no letters), 5 if the password is correct, and 6 for all other cases(mostly for being incorrect.)*/
+  var passwordcheckeventfunction = function(){
+    var isderguessright = passwordcheckforrightness();
+    switch (isderguessright){
+      case 4:
+        break;
+      case 5:
+        h1Element.innerHTML = "CONGRATULATIONS. YOU GOT THE PASSWORD RIGHT. NICE JOB. Two buttons have appeared. Choose one to play or the other to not play.";
+        victorylosspic.innerHTML = "<img src='images/win.jpg' width = '200' height = '200'/>";
+        e.removeEventListener("click",buttonlistenerforlengthcheck);
+        e.removeEventListener("click",passwordcheckeventfunction);
+        e.removeEventListener("click",hinteventfunction);
+        e.removeEventListener("click",freezeeventlistener);
+        resulttablearray[index-1].innerHTML = "You got it right!";
+        var playagainbutton = document.body.getElementsByClassName("dasbuttons")[0];
+        playagainbutton.innerHTML = "<button class='playagainbutton'>Play Again</button><button class='notplayagainbutton'>No Thanks</button>"
+        var playagainbutton = document.body.getElementsByClassName("playagainbutton")[0];
+        var notplayagainbutton = document.body.getElementsByClassName("notplayagainbutton")[0];
+        var reloadevent = function(){
+          location.reload();
+        }
+      /*This is used to reload the page and is used in the reload buttons. If a person loses or wins and wants to play again, they press this button.*/
+        var finalending = function(){
+          h1Element.innerHTML = "Well it was nice meeting you.";
+          playagainbutton.removeEventListener("click", reloadevent);
+          notplayagainbutton.removeEventListener("click",finalending);
+        }
+      /*If the user does not want to play again, this removes the event listeners so that there is actually nothing else they can do besides quit or reload.*/
+        playagainbutton.addEventListener("click", reloadevent);
+        notplayagainbutton.addEventListener("click", finalending);
+        break;
+      case 6:
+        hintometer++;
+        break;
+      default:
+        h1Element.innerHTML = "Whoops. There was a problem. Please contact God for help.";
+        break;
+    }
+  }
+/*This function uses the previous values. If it is 4, nothing happens and the hintcounter does not go off. If it is 5, you remove*/
+/*all the event listeners from the enter button, the table and heading say that you won, and you get two buttons for playing again or quitting.*/
+  var hintornottohint = function(){
+    var hintcounter = hintometer;
+    var isdisreal = lengthNaNchecker();
+    if (isdisreal == 1 || isdisreal == 2){
+      return 7;
+    }
+    else{
+      return 8;
+    }
+  }
+/*This checks to make sure that the input is enough to give a hint and it returns a number. 7 means that it is either has letters or is not 4 characters.*/
+  var hinteventfunction = function(){
+    var hinthinty = hintornottohint();
+    switch(hinthinty){
+      case 7:
+        break;
+      case 8:
+      var numericpass = Number(daspasswordinuse);
+      var numericguess = Number(guessestablearray[index - 1].innerHTML);
+        switch(hintometer){
+          case 1:
+            var difference = Math.abs(numericguess - numericpass);
+            resulttablearray[index-1].innerHTML = "Your number was " + difference + " away from the password.";
+            break;
+          case 2:
+            resulttablearray[index-1].innerHTML = "Git gud scrub.";
+            break;
+          case 3:
+            var i= 0;
+            var subi = 1;
+            var sumtotaldigits = 0;
+            while (i < 4){
+              dassubstring = daspasswordinuse.substring(i,subi);
+              sumtotaldigits += Number(dassubstring);
+              i++;
+              subi++;
+          }
+            resulttablearray[index-1].innerHTML = "The sum of the digits is " + sumtotaldigits + ".";
+            break;
+          case 4:
+            firstdigit = daspasswordinuse.substring(0,1);
+            resulttablearray[index-1].innerHTML = "The first digit is " + firstdigit + ".";
+            break;
+          case 5:
+            resulttablearray[index-1].innerHTML = "You done goofed. The number was " + daspasswordinuse + "." ;
+            break;
+          default:
+            h1Element.innerHTML = "Whoops. There was a problem. Please contact God for help.";
+            break;
+        }
+    }
+  }
+/*This uses the previous returned value. If it is 7, nothing happens. If it is 8, first the hint number is counted and then the subsequent comment is given.*/
+  var freezedaspassword = function(){
+    if (guesses < 5){
+      return 9;
+    }
+    else{
+      return 10;
+    }
+  }
+/*This returns a value for the freezing of the game if you use up five tries. 9 means that you are not at five guesses while 10 means that you are at five gusses and beyond.*/
+  var freezeeventlistener = function(){
+    var shouldifreeze = freezedaspassword();
+    inputbox.value = "";
+    switch(shouldifreeze){
+      case 9:
+        break;
+      case 10:
+      victorylosspic.innerHTML = "<img src='images/loss.jpg' width = '200' height = '200'/>";
+      e.removeEventListener("click",buttonlistenerforlengthcheck);
+      e.removeEventListener("click",passwordcheckeventfunction);
+      e.removeEventListener("click",hinteventfunction);
+      e.removeEventListener("click",freezeeventlistener);
+      h1Element.innerHTML = "I am sorry, but you have lost. Use the reload button to try again.";
+      var retrybutton = document.body.getElementsByClassName("dasbuttons")[0];
+      retrybutton.innerHTML = "<button class='reloadbutton'>Press me to reload</button>";
+      var reloadbutton = document.body.getElementsByClassName("reloadbutton")[0];
+      reloadbutton.addEventListener("click", function(){
+        location.reload();
+      })
+      break;
+    }
+  }
+/*This is the listener that freezes the game. If 9 (less than five guesses), then nothing happens. If 10, then the enter button listeners are disabled and the player needs to use the button to reload the page.*/
+
+  e.addEventListener("click",buttonlistenerforlengthcheck);
+  e.addEventListener("click",passwordcheckeventfunction);
+  e.addEventListener("click",hinteventfunction);
+  e.addEventListener("click",freezeeventlistener);
+/*These add the checking functions as listeners to the enter button.*/
+  var one = document.body.getElementsByClassName("1")[0];
+  var two = document.body.getElementsByClassName("2")[0];
+  var three = document.body.getElementsByClassName("3")[0];
+  var four = document.body.getElementsByClassName("4")[0];
+  var five = document.body.getElementsByClassName("5")[0];
+  var six = document.body.getElementsByClassName("6")[0];
+  var seven = document.body.getElementsByClassName("7")[0];
+  var eight = document.body.getElementsByClassName("8")[0];
+  var nine = document.body.getElementsByClassName("9")[0];
+  var zero = document.body.getElementsByClassName("0")[0];
+  var x = document.body.getElementsByClassName("x")[0];
+/*The above variables are used to grab the buttons in the keypad.*/
+  one.addEventListener("click",function(){inputbox.value += "1";});
+  two.addEventListener("click",function(){inputbox.value += "2";});
+  three.addEventListener("click",function(){inputbox.value += "3";});
+  four.addEventListener("click",function(){inputbox.value += "4";});
+  five.addEventListener("click",function(){inputbox.value += "5";});
+  six.addEventListener("click",function(){inputbox.value += "6";});
+  seven.addEventListener("click",function(){inputbox.value += "7";});
+  eight.addEventListener("click",function(){inputbox.value += "8";});
+  nine.addEventListener("click",function(){inputbox.value += "9";});
+  zero.addEventListener("click",function(){inputbox.value += "0";});
+  x.addEventListener("click",deleter);
+/*These event listeners are used in order to make the numpad work.*/
+}
+superbuttongamestarter.addEventListener("click",startdergame);
+/*This gives the event listener to start the game.*/
