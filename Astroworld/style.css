@@ -1,0 +1,52 @@
+body {
+    margin: 20px;
+    font-family: Arial;
+    
+}
+#vintage{
+    border-style: solid;
+    border-width: 20px;
+    border-color: green;
+    
+    
+}
+html {
+    background-color: red;
+}
+img {
+    margin-right: auto;
+    margin-left: auto;
+    max-width: 500px;
+    display: block;
+    border-radius:2px;
+    border: 2px solid white;
+
+
+
+
+}
+ul{
+    color: green;
+}
+.content {
+    font-family: Arial;
+    text-align:center;
+}
+#navigation {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: #333;
+
+
+}
+.finesse{ 
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    float: left;
+    background-color: #111;
+}
