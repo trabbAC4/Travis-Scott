@@ -1,7 +1,23 @@
 <html>
     <head>
+        <script src="main.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/4.2.0/firebase.js"></script>
+        <script>
+  // Initialize Firebase
+    var config = {
+    apiKey: "AIzaSyBFmIZKG0Nij47g45NGg1t2HQ_vnah-LFE",
+    authDomain: "le-projet-e2a92.firebaseapp.com",
+    databaseURL: "https://le-projet-e2a92.firebaseio.com",
+    projectId: "le-projet-e2a92",
+    storageBucket: "le-projet-e2a92.appspot.com",
+    messagingSenderId: "549390447751"
+  };
+  firebase.initializeApp(config);
+</script>
     </head>
      <body>
-         <h1> hello world! </h1>
+         <h1 id="greeting"> </h1>
+         <p id= "favoriteFood"></p>
      </body> 
 </html>
